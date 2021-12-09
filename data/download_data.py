@@ -51,12 +51,12 @@ def download_to_tempfile(url: str):
 def download_all():
     log.info("Downloading smiles archive from %s...", SMILES_URL)
     smiles_tempfile = download_to_tempfile(SMILES_URL)
-    shutil.copy(smiles_tempfile.name, "data/smiles.tsv.gz")
+    shutil.copy(smiles_tempfile.name, "data/raw/smiles.tsv.gz")
     log.info("Done.")
 
     log.info("Downloading activity data from %s...", ACTIVITY_URL)
     activity_tempfile = download_to_tempfile(ACTIVITY_URL)
-    shutil.copy(activity_tempfile.name, "data/activities.tsv.gz")
+    shutil.copy(activity_tempfile.name, "data/raw/activities.tsv.gz")
     log.info("Done.")
 
 
