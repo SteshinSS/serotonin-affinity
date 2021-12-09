@@ -1,5 +1,5 @@
-data/*
-!data/*.py
+data/raw
+data/preprocessed
 
 __pycache__/
 *.py[cod]
