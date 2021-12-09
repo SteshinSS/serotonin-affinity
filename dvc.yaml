@@ -1,0 +1,9 @@
+stages:
+  filter:
+    cmd: >-
+      python data/filter.py  --threshold ${filter.threshold} --keep_null ${filter.keep_null} data/raw/smiles.tsv.gz data/raw/activities.tsv.gz data/filtered/filtered.csv
+    deps:
+      - data/raw/activities.tsv.gz
+      - data/raw/smiles.tsv.gz
+    outs:
+      - data/filtered

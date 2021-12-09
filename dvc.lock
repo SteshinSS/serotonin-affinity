@@ -1,0 +1,17 @@
+schema: '2.0'
+stages:
+  filter:
+    cmd: python data/filter.py  --threshold 8.0 --keep_null true data/raw/smiles.tsv.gz
+      data/raw/activities.tsv.gz data/filtered/filtered.csv
+    deps:
+    - path: data/raw/activities.tsv.gz
+      md5: 91eb205b6a7b5edcfe0bd76aa685fb6e
+      size: 67518
+    - path: data/raw/smiles.tsv.gz
+      md5: 683875548e9d7b5b98b7349ee325e41d
+      size: 24872450
+    outs:
+    - path: data/filtered
+      md5: 9f06ebed05017f359cbaabc0db18c8b1.dir
+      size: 361545
+      nfiles: 1
