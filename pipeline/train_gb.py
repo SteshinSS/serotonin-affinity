@@ -19,7 +19,17 @@ def get_parser():
     )
     parser.add_argument("output", type=str, help="Path to save result model")
     parser.add_argument("--subsample", type=float, default=0.1, help="Fraction of samples used for fitting a single tree")
+    parser.add_argument("--use_weights", type=str, default="true", choices=["true", "false"], help="Use weighted loss. Use it if you have unbalanced dataset")
     return parser
+
+
+def get_weight(labels: np.ndarray):
+    total_elements = labels.size
+    total_ones = (labels == 1).sum()
+    coefficient = (total_elements - total_ones) / total_ones
+    weights = np.ones(labels.shape)
+    weights[labels == 1] *= coefficient
+    return weights
 
 
 if __name__ == "__main__":
@@ -29,7 +39,12 @@ if __name__ == "__main__":
     gb = GradientBoostingClassifier(subsample=args.subsample)
     dataset = np.load(args.input)
 
-    gb.fit(dataset["X"], dataset["y"])
+    if args.use_weights:
+        weights = get_weight(dataset["y"])
+    else:
+        weights = None
+
+    gb.fit(dataset["X"], dataset["y"], weights)
 
     # Create folder if there is none
     output_dir = Path(args.output).parent

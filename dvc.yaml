@@ -92,6 +92,7 @@ stages:
     cmd: >-
       python pipeline/train_gb.py
       --subsample=${train_gb.subsample}
+      --use_weights=${train_gb.use_weights}
       data/features/fingerprints/maccs/train.npz
       models/gb_maccs_fp/model.pkl
     deps:

@@ -16,4 +16,5 @@ featurize_voxels:
 
 train_gb:
   subsample: 0.1
+  use_weights: true
   

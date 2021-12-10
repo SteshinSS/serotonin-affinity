@@ -88,26 +88,26 @@ stages:
       md5: 460d25459b00bbe91c9c160035fb93df
       size: 2662924
     - path: pipeline/train_gb.py
-      md5: 50b0d8d6862b719544afd8a2d2247160
-      size: 1126
+      md5: d70a1074158672ce68ca378c7c3d7460
+      size: 1660
     outs:
     - path: models/gb_topological_fp/model.pkl
-      md5: bdf21e279cbcf151a3ac3baf0cd5b789
-      size: 124892
+      md5: 56684ff43c9089f175e9b78a51c0ad2d
+      size: 124764
   train_gb_maccs_fp:
-    cmd: python pipeline/train_gb.py --subsample=0.1 data/features/fingerprints/maccs/train.npz
+    cmd: python pipeline/train_gb.py --subsample=0.1 --use_weights=true data/features/fingerprints/maccs/train.npz
       models/gb_maccs_fp/model.pkl
     deps:
     - path: data/features/fingerprints/maccs/train.npz
       md5: 735ad5a2a827ff0f7728a7f48d8d4b74
       size: 167749
     - path: pipeline/train_gb.py
-      md5: 50b0d8d6862b719544afd8a2d2247160
-      size: 1126
+      md5: d70a1074158672ce68ca378c7c3d7460
+      size: 1660
     outs:
     - path: models/gb_maccs_fp/model.pkl
-      md5: 5aaf7288333280d76733f33fd4edca8d
-      size: 122030
+      md5: d407b5888940556210fe1e4680f21413
+      size: 123566
   train_gb_morgan_fp:
     cmd: python pipeline/train_gb.py --subsample=0.1 data/features/fingerprints/morgan/train.npz
       models/gb_morgan_fp/model.pkl
@@ -116,9 +116,9 @@ stages:
       md5: aa1be840e72f463fd3220eeb77981f1b
       size: 468103
     - path: pipeline/train_gb.py
-      md5: 50b0d8d6862b719544afd8a2d2247160
-      size: 1126
+      md5: d70a1074158672ce68ca378c7c3d7460
+      size: 1660
     outs:
     - path: models/gb_morgan_fp/model.pkl
-      md5: 18c3b9b44a51e46486b58e33f7f715bf
-      size: 116572
+      md5: 3fef5da8bbae2a9788d29e2c5cfeca64
+      size: 121692
