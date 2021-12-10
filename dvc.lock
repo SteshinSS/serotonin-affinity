@@ -10,6 +10,9 @@ stages:
     - path: data/raw/smiles.tsv.gz
       md5: 683875548e9d7b5b98b7349ee325e41d
       size: 24872450
+    - path: pipeline/filter.py
+      md5: ea7f75ac5c3b9accab8973a5f59c3586
+      size: 3060
     outs:
     - path: data/filtered
       md5: 9f06ebed05017f359cbaabc0db18c8b1.dir
@@ -23,8 +26,57 @@ stages:
       md5: 9f06ebed05017f359cbaabc0db18c8b1.dir
       size: 361545
       nfiles: 1
+    - path: pipeline/split.py
+      md5: 115ea0773a943cf25a9ec90cda52d8d3
+      size: 2156
     outs:
     - path: data/splitted
       md5: d70a2f15bfb6f458327e94e4deb32d7b.dir
       size: 361597
+      nfiles: 3
+  featurize_topological_fp:
+    cmd: python pipeline/featurize_topological_fp.py data/splitted data/features/fingerprints/topological
+    deps:
+    - path: data/splitted
+      md5: d70a2f15bfb6f458327e94e4deb32d7b.dir
+      size: 361597
+      nfiles: 3
+    - path: pipeline/featurize_topological_fp.py
+      md5: 17fca59680a892439f6039be4c589e25
+      size: 1850
+    outs:
+    - path: data/features/fingerprints/topological
+      md5: da74a20eb50e4d6b963257f37daa1686.dir
+      size: 3697740
+      nfiles: 3
+  featurize_maccs_fp:
+    cmd: python pipeline/featurize_maccs_fp.py data/splitted data/features/fingerprints/maccs
+    deps:
+    - path: data/splitted
+      md5: d70a2f15bfb6f458327e94e4deb32d7b.dir
+      size: 361597
+      nfiles: 3
+    - path: pipeline/featurize_maccs_fp.py
+      md5: 9e00796d064c56e312a6b25bff16d869
+      size: 1874
+    outs:
+    - path: data/features/fingerprints/maccs
+      md5: edc82cb6f684aee6724a7bba0e673bc9.dir
+      size: 233868
+      nfiles: 3
+  featurize_morgan_fp:
+    cmd: python pipeline/featurize_morgan_fp.py --radius=2 --n_bits=1024 data/splitted
+      data/features/fingerprints/morgan
+    deps:
+    - path: data/splitted
+      md5: d70a2f15bfb6f458327e94e4deb32d7b.dir
+      size: 361597
+      nfiles: 3
+    - path: pipeline/featurize_morgan_fp.py
+      md5: a16c0bbbd0a95ad45437c90487e3b5ad
+      size: 2221
+    outs:
+    - path: data/features/fingerprints/morgan
+      md5: a1815dc024a3e2f9790dc2a88bb29361.dir
+      size: 650610
       nfiles: 3

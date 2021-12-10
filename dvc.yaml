@@ -10,6 +10,7 @@ stages:
     deps:
       - data/raw/activities.tsv.gz
       - data/raw/smiles.tsv.gz
+      - pipeline/filter.py
     outs:
       - data/filtered
   
@@ -23,6 +24,43 @@ stages:
       data/filtered/filtered.csv
       data/splitted
     deps:
-    - data/filtered
+      - data/filtered
+      - pipeline/split.py
     outs:
-    - data/splitted
+      - data/splitted
+  
+  featurize_topological_fp:
+    cmd: >-
+      python pipeline/featurize_topological_fp.py
+      data/splitted
+      data/features/fingerprints/topological
+    deps:
+      - data/splitted
+      - pipeline/featurize_topological_fp.py
+    outs:
+      - data/features/fingerprints/topological
+
+  featurize_morgan_fp:
+    cmd: >-
+      python pipeline/featurize_morgan_fp.py
+      --radius=${featurize_morgan_fp.radius}
+      --n_bits=${featurize_morgan_fp.n_bits}
+      data/splitted
+      data/features/fingerprints/morgan
+    deps:
+      - data/splitted
+      - pipeline/featurize_morgan_fp.py
+    outs:
+      - data/features/fingerprints/morgan
+  
+  featurize_maccs_fp:
+    cmd: >-
+      python pipeline/featurize_maccs_fp.py
+      data/splitted
+      data/features/fingerprints/maccs
+    deps:
+      - data/splitted
+      - pipeline/featurize_maccs_fp.py
+    outs:
+      - data/features/fingerprints/maccs
+    

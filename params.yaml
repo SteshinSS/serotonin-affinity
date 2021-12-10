@@ -8,8 +8,11 @@ split:
   homology_based: false
   random_seed: 228
 
-feature_extraction:
-  type: topological
+featurize_morgan_fp:
+  radius: 2
+  n_bits: 1024
+
+featurize_voxels:
 
 
 
