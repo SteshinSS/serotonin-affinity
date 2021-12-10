@@ -122,3 +122,15 @@ stages:
     - path: models/gb_morgan_fp/model.pkl
       md5: 3fef5da8bbae2a9788d29e2c5cfeca64
       size: 121692
+  generate_conformers:
+    cmd: python pipeline/generate_conformers.py data/splitted data/conformers
+    deps:
+    - path: data/splitted
+      md5: d70a2f15bfb6f458327e94e4deb32d7b.dir
+      size: 361597
+      nfiles: 3
+    outs:
+    - path: data/conformers
+      md5: 25535a1cc09bcf449982df0032d5f294.dir
+      size: 8457836
+      nfiles: 3

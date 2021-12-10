@@ -100,5 +100,27 @@ stages:
       - pipeline/train_gb.py
     outs:
       - models/gb_maccs_fp/model.pkl
+  
+  generate_conformers:
+    cmd: >-
+      python pipeline/generate_conformers.py
+      data/splitted
+      data/conformers
+    deps:
+      - data/splitted
+      - pipeline/generate_conformers.py
+    outs:
+      - data/conformers
+  
+  generate_voxels:
+    cmd: >-
+      python pipeline/generate_voxels.py
+      data/conformers
+      data/voxels
+    deps:
+      - data/conformers
+      - pipeline/generate_voxels.py
+    outs:
+      - data/voxels
     
     
