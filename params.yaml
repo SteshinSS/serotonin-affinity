@@ -14,5 +14,6 @@ featurize_morgan_fp:
 
 featurize_voxels:
 
-
-
+train_gb:
+  subsample: 0.1
+  

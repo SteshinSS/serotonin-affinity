@@ -63,4 +63,41 @@ stages:
       - pipeline/featurize_maccs_fp.py
     outs:
       - data/features/fingerprints/maccs
+  
+  train_gb_topological_fp:
+    cmd: >-
+      python pipeline/train_gb.py
+      --subsample=${train_gb.subsample}
+      data/features/fingerprints/topological/train.npz
+      models/gb_topological_fp/model.pkl
+    deps:
+      - data/features/fingerprints/topological/train.npz
+      - pipeline/train_gb.py
+    outs:
+      - models/gb_topological_fp/model.pkl
+
+  train_gb_morgan_fp:
+    cmd: >-
+      python pipeline/train_gb.py
+      --subsample=${train_gb.subsample}
+      data/features/fingerprints/morgan/train.npz
+      models/gb_morgan_fp/model.pkl
+    deps:
+      - data/features/fingerprints/morgan/train.npz
+      - pipeline/train_gb.py
+    outs:
+      - models/gb_morgan_fp/model.pkl
+
+  train_gb_maccs_fp:
+    cmd: >-
+      python pipeline/train_gb.py
+      --subsample=${train_gb.subsample}
+      data/features/fingerprints/maccs/train.npz
+      models/gb_maccs_fp/model.pkl
+    deps:
+      - data/features/fingerprints/maccs/train.npz
+      - pipeline/train_gb.py
+    outs:
+      - models/gb_maccs_fp/model.pkl
+    
     
