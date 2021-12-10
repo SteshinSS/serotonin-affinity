@@ -1,6 +1,8 @@
 absl-py==1.0.0
+aiobotocore==1.4.2
 aiohttp==3.8.1
 aiohttp-retry==2.4.6
+aioitertools==0.8.0
 aiosignal==1.2.0
 appdirs==1.4.4
 argon2-cffi==21.2.0
@@ -13,6 +15,8 @@ attrs==21.2.0
 backcall==0.2.0
 black==21.12b0
 bleach==4.1.0
+boto3==1.17.106
+botocore==1.20.106
 cachetools==4.2.4
 certifi==2021.10.8
 cffi==1.15.0
@@ -40,7 +44,7 @@ flatten-dict==0.4.2
 flufl.lock==6.0
 fonttools==4.28.3
 frozenlist==1.2.0
-fsspec==2021.11.1
+fsspec==2021.11.0
 ftfy==6.0.3
 funcy==1.16
 future==0.18.2
@@ -59,6 +63,7 @@ ipywidgets==7.6.5
 isort==5.10.1
 jedi==0.18.1
 Jinja2==3.0.3
+jmespath==0.10.0
 joblib==1.1.0
 jsonschema==4.2.1
 jupyter==1.0.0
@@ -76,6 +81,7 @@ matplotlib==3.5.0
 matplotlib-inline==0.1.3
 mccabe==0.6.1
 mistune==0.8.4
+moleculekit==0.9.14
 multidict==5.2.0
 mypy==0.910
 mypy-extensions==0.4.3
@@ -134,6 +140,8 @@ rich==10.15.2
 rsa==4.8
 ruamel.yaml==0.17.17
 ruamel.yaml.clib==0.2.6
+s3fs==2021.11.0
+s3transfer==0.4.2
 scikit-learn==1.0.1
 scipy==1.7.3
 scmrepo==0.0.3
