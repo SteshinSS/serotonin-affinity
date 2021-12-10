@@ -115,6 +115,10 @@ stages:
   generate_voxels:
     cmd: >-
       python pipeline/generate_voxels.py
+      --voxel_size=${generate_voxels.voxel_size}
+      --box_size_x=${generate_voxels.box_size_x}
+      --box_size_y=${generate_voxels.box_size_y}
+      --box_size_z=${generate_voxels.box_size_z}
       data/conformers
       data/voxels
     deps:

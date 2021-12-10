@@ -37,7 +37,7 @@ def convert_dataset(dataset: pd.DataFrame):
         try:
             molecule = Chem.MolFromSmiles(row[1])
             molecule = get_conformer(molecule)
-            conformers.append(molecule)
+            conformers.append((molecule, row[2]))
         except (IndexError, ValueError):
             bad_smiles.append(row[1])
     

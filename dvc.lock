@@ -129,8 +129,27 @@ stages:
       md5: d70a2f15bfb6f458327e94e4deb32d7b.dir
       size: 361597
       nfiles: 3
+    - path: pipeline/generate_conformers.py
+      md5: b31bcaa9465e897410f3b7bfbc521740
+      size: 2033
     outs:
     - path: data/conformers
-      md5: 25535a1cc09bcf449982df0032d5f294.dir
-      size: 8457836
+      md5: bcee52d74eb9d7304e7f2070d0ef3d65.dir
+      size: 8483776
+      nfiles: 3
+  generate_voxels:
+    cmd: python pipeline/generate_voxels.py --voxel_size=0.5 --box_size_x=10 --box_size_y=10
+      --box_size_z=10 data/conformers data/voxels
+    deps:
+    - path: data/conformers
+      md5: bcee52d74eb9d7304e7f2070d0ef3d65.dir
+      size: 8483776
+      nfiles: 3
+    - path: pipeline/generate_voxels.py
+      md5: eb9c84066a90234078ac9d517ae04c16
+      size: 2394
+    outs:
+    - path: data/voxels
+      md5: 50a6fdd1cfaef4d8a473cc7b68629195.dir
+      size: 1022491856
       nfiles: 3
