@@ -48,11 +48,13 @@ def filter_dataset(
 
 def get_parser():
     parser = argparse.ArgumentParser(description="Filter trash out of raw data")
-    parser.add_argument("smiles_path", type=str, help="Path to the smiles.tsv.gz file")
     parser.add_argument(
-        "activity_path", type=str, help="Path to the activities.tsv.gz file"
+        "smiles_dataset", type=str, help="Path to the smiles.tsv.gz file"
     )
-    parser.add_argument("output_file", type=str, help="Path to save result file")
+    parser.add_argument(
+        "activity_dataset", type=str, help="Path to the activities.tsv.gz file"
+    )
+    parser.add_argument("output", type=str, help="Path to save result file")
     parser.add_argument(
         "--threshold",
         type=float,
@@ -73,8 +75,8 @@ if __name__ == "__main__":
     parser = get_parser()
     args = parser.parse_args()
 
-    smiles = pd.read_csv(args.smiles_path, compression="gzip", sep="\t")
-    activity = pd.read_csv(args.activity_path, compression="gzip", sep="\t")
+    smiles = pd.read_csv(args.smiles_dataset, compression="gzip", sep="\t")
+    activity = pd.read_csv(args.activity_dataset, compression="gzip", sep="\t")
 
     id_with_affinity = set(activity["molregno"].to_list())
     all_id = set(smiles["molregno"].to_list())
@@ -84,11 +86,11 @@ if __name__ == "__main__":
     log.info(f"Creating filtered data table...")
 
     filtered_data = filter_dataset(
-        smiles, activity, smiles_with_affinity, args.threshold, args.keep_null
+        smiles, activity, smiles_with_affinity, args.threshold, args.keep_null == "true"
     )
 
     # Create folder if there is none
-    output_dir = Path(args.output_file).parent
+    output_dir = Path(args.output).parent
     output_dir.mkdir(parents=True, exist_ok=True)
-    filtered_data.to_csv(args.output_file)
-    log.info(f"Done. Result is saved to {args.output_file}")
+    filtered_data.to_csv(args.output)
+    log.info(f"Done. Result is saved to {args.output}")

@@ -1,7 +1,7 @@
 schema: '2.0'
 stages:
   filter:
-    cmd: python data/filter.py  --threshold 8.0 --keep_null true data/raw/smiles.tsv.gz
+    cmd: python pipeline/filter.py --threshold=8.0 --keep_null=true data/raw/smiles.tsv.gz
       data/raw/activities.tsv.gz data/filtered/filtered.csv
     deps:
     - path: data/raw/activities.tsv.gz
@@ -15,3 +15,16 @@ stages:
       md5: 9f06ebed05017f359cbaabc0db18c8b1.dir
       size: 361545
       nfiles: 1
+  split:
+    cmd: python pipeline/split.py --test_ratio=0.2 --val_ratio=0.1 --homology_based
+      false --random_seed 228 data/filtered/filtered.csv data/splitted
+    deps:
+    - path: data/filtered
+      md5: 9f06ebed05017f359cbaabc0db18c8b1.dir
+      size: 361545
+      nfiles: 1
+    outs:
+    - path: data/splitted
+      md5: d70a2f15bfb6f458327e94e4deb32d7b.dir
+      size: 361597
+      nfiles: 3

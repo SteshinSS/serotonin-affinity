@@ -1,9 +1,28 @@
 stages:
   filter:
     cmd: >-
-      python data/filter.py  --threshold ${filter.threshold} --keep_null ${filter.keep_null} data/raw/smiles.tsv.gz data/raw/activities.tsv.gz data/filtered/filtered.csv
+      python pipeline/filter.py
+      --threshold=${filter.threshold}
+      --keep_null=${filter.keep_null}
+      data/raw/smiles.tsv.gz
+      data/raw/activities.tsv.gz
+      data/filtered/filtered.csv
     deps:
       - data/raw/activities.tsv.gz
       - data/raw/smiles.tsv.gz
     outs:
       - data/filtered
+  
+  split:
+    cmd: >-
+      python pipeline/split.py
+      --test_ratio=${split.test_ratio}
+      --val_ratio=${split.val_ratio}
+      --homology_based ${split.homology_based}
+      --random_seed ${split.random_seed}
+      data/filtered/filtered.csv
+      data/splitted
+    deps:
+    - data/filtered
+    outs:
+    - data/splitted
