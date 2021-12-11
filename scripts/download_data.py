@@ -1,6 +1,7 @@
 # Simple script for data downloading
 import logging
 import shutil
+from pathlib import Path
 import tempfile
 
 import requests  # type: ignore
@@ -49,6 +50,10 @@ def download_to_tempfile(url: str):
 
 
 def download_all():
+    # Create folder if there is none
+    output_dir = Path("data/raw")
+    output_dir.mkdir(parents=True, exist_ok=True)
+
     log.info("Downloading smiles archive from %s...", SMILES_URL)
     smiles_tempfile = download_to_tempfile(SMILES_URL)
     shutil.copy(smiles_tempfile.name, "data/raw/smiles.tsv.gz")
