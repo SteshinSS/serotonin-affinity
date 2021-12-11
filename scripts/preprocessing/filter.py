@@ -16,7 +16,18 @@ def filter_dataset(
     affinity_threshold: float,
     keep_null: bool,
 ) -> pd.DataFrame:
-    # TODO: Write docstring.
+    """Filters raw dataset and binarize affinity value.
+
+    Args:
+        smiles (pd.DataFrame): Smiles dataset.
+        activity (pd.DataFrame): Activity dataset.
+        selected_molregno (set): molregno of molecules to save.
+        affinity_threshold (float): Minimal value to consider a ligand to be active.
+        keep_null (bool): Keep molecules with null affinity value. Consider null molecules as not active, if true.
+
+    Returns:
+        pd.DataFrame: filtered dataset
+    """
     filtered_smiles = []
     filtered_affinity = []
 

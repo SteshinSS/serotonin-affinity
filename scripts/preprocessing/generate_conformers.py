@@ -22,7 +22,7 @@ def get_parser():
 
 def get_conformer(molecule: Chem.rdchem.Mol):
     molecule = Chem.AddHs(molecule)
-    AllChem.EmbedMolecule(molecule)
+    AllChem.EmbedMolecule(molecule, randomSeed=25391793)
     AllChem.MMFFOptimizeMolecule(molecule)
     return molecule
 

@@ -90,8 +90,9 @@ stages:
         - scripts/evaluation/eval_gb.py
         - models/gb_topological_fp/model.pkl
         - data/features/fingerprints/topological/${item}.npz
-      outs:
+      metrics:
         - results/gb_topological_fp/${item}.json
+
 
   train_gb_morgan_fp:
     cmd: >-
@@ -119,7 +120,7 @@ stages:
         - scripts/evaluation/eval_gb.py
         - models/gb_morgan_fp/model.pkl
         - data/features/fingerprints/morgan/${item}.npz
-      outs:
+      metrics:
         - results/gb_morgan_fp/${item}.json
 
   train_gb_maccs_fp:
@@ -149,7 +150,7 @@ stages:
         - scripts/evaluation/eval_gb.py
         - models/gb_maccs_fp/model.pkl
         - data/features/fingerprints/maccs/${item}.npz
-      outs:
+      metrics:
         - results/gb_maccs_fp/${item}.json
   
   generate_conformers:

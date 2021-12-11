@@ -49,6 +49,14 @@ def get_random_split(dataset: pd.DataFrame, test_ratio: float, val_ratio: float,
 
 
 def get_fingerprints(dataset: pd.DataFrame):
+    """Creates list of fingerprints.
+
+    Args:
+        dataset (pd.DataFrame): Filtered and splitted dataset
+
+    Returns:
+        list: of Morgan fingerprints
+    """
     fingerprints = []
     for row in dataset.itertuples():
         smiles = row[1]
@@ -79,6 +87,17 @@ def get_flattened_list(list_of_tuples):
 def get_homology_based_split(
     dataset: pd.DataFrame, test_ratio: float, val_ratio: float, rng
 ):
+    """Clusters similar molecules and splits clusters.
+
+    Args:
+        dataset (pd.DataFrame): Filtered and splitted dataset.
+        test_ratio (float): Ratio of the test split (of the all filtered dataset).
+        val_ratio (float): Ratio of the validation split (of the filtered dataset without test data).
+        rng ([type]): random number generator
+
+    Returns:
+        tuple of (train, val, test) datasets
+    """
     fingerprints = get_fingerprints(dataset)
     clusters = clusterize_fingerprints(fingerprints)
     id_train_and_val, id_test = train_test_split(clusters, test_size=test_ratio)
@@ -104,13 +123,16 @@ if __name__ == "__main__":
 
     rng = np.random.RandomState(args.random_seed)
     if args.homology_based == "true":
-        train, val, test = get_homology_based_split(data, args.test_ratio, args.val_ratio, rng)
+        train, val, test = get_homology_based_split(
+            data, args.test_ratio, args.val_ratio, rng
+        )
     else:
         train, val, test = get_random_split(data, args.test_ratio, args.val_ratio, rng)
 
     # Create folder if there is none
     output_dir = Path(args.output)
     output_dir.mkdir(parents=True, exist_ok=True)
+
     train.to_csv(output_dir / "train.csv")
     val.to_csv(output_dir / "val.csv")
     test.to_csv(output_dir / "test.csv")

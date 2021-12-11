@@ -1,15 +1,27 @@
 filter:
+  # Minimal value to consider a ligand to be active
   threshold: 8.0
+
+  # Keep molecules with null affinity value. Consider null molecules as not active, if true
   keep_null: true
 
 split:
-  test_ratio: 0.2  # test subset ratio of the all data
-  val_ratio: 0.1  # validation subset ratio of the all dataset without the test data
+  # Ratio of the test split (of the all filtered dataset)
+  test_ratio: 0.2
+
+  # Ratio of the validation split (of the filtered dataset without test data)
+  val_ratio: 0.1
+
+  # Split clusters of similar molecules instead of single molecules, if true
   homology_based: true
+
   random_seed: 228
 
 featurize_morgan_fp:
+  # Radius of Morgan fingerprints
   radius: 2
+
+  # Number of bit of a fingerprint
   n_bits: 1024
 
 train_gb:
