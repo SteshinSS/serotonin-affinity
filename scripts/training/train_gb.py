@@ -18,8 +18,31 @@ def get_parser():
         "input", type=str, help="Path to folder with train/val/test.npz features"
     )
     parser.add_argument("output", type=str, help="Path to save result model")
-    parser.add_argument("--subsample", type=float, default=0.1, help="Fraction of samples used for fitting a single tree")
-    parser.add_argument("--use_weights", type=str, default="true", choices=["true", "false"], help="Use weighted loss. Use it if you have unbalanced dataset")
+    parser.add_argument(
+        "--subsample",
+        type=float,
+        default=0.1,
+        help="Fraction of samples used for fitting a single tree",
+    )
+    parser.add_argument(
+        "--n_estimators",
+        type=int,
+        default=100,
+        help="The number of boosting stages to perform",
+    )
+    parser.add_argument(
+        "--max_depth",
+        type=int,
+        default=3,
+        help="The maximum depth of the individual regression estimators",
+    )
+    parser.add_argument(
+        "--use_weights",
+        type=str,
+        default="true",
+        choices=["true", "false"],
+        help="Use weighted loss. Use it if you have unbalanced dataset",
+    )
     return parser
 
 
@@ -36,7 +59,11 @@ if __name__ == "__main__":
     parser = get_parser()
     args = parser.parse_args()
 
-    gb = GradientBoostingClassifier(subsample=args.subsample)
+    gb = GradientBoostingClassifier(
+        subsample=args.subsample,
+        max_depth=args.max_depth,
+        n_estimators=args.n_estimators,
+    )
     dataset = np.load(args.input)
 
     if args.use_weights:
@@ -51,4 +78,3 @@ if __name__ == "__main__":
     output_dir.mkdir(parents=True, exist_ok=True)
     with open(args.output, "wb") as f:
         pickle.dump(gb, f)
-

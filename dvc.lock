@@ -95,19 +95,19 @@ stages:
       md5: 4942f5364f1af1e4400e18cb58346ae0
       size: 124891
   train_gb_maccs_fp:
-    cmd: python scripts/training/train_gb.py --subsample=0.1 --use_weights=true data/features/fingerprints/maccs/train.npz
-      models/gb_maccs_fp/model.pkl
+    cmd: python scripts/training/train_gb.py --subsample=0.3 --n_estimators=300 --max_depth=3
+      --use_weights=true data/features/fingerprints/maccs/train.npz models/gb_maccs_fp/model.pkl
     deps:
     - path: data/features/fingerprints/maccs/train.npz
       md5: bae528ac6add579d9c0ec51c6f2ae8cc
       size: 148309
     - path: scripts/training/train_gb.py
-      md5: d70a1074158672ce68ca378c7c3d7460
-      size: 1660
+      md5: fae5c50dc1c9ba434cd0b4da51c6eb27
+      size: 2152
     outs:
     - path: models/gb_maccs_fp/model.pkl
-      md5: d550e93ad06967a2c0c932dd4c3ad700
-      size: 123438
+      md5: 6460bf2c682ab03a5efd6decfd9faba1
+      size: 364519
   train_gb_morgan_fp:
     cmd: python scripts/training/train_gb.py --subsample=0.1 data/features/fingerprints/morgan/train.npz
       models/gb_morgan_fp/model.pkl
@@ -195,15 +195,15 @@ stages:
       md5: c8bdaac1ec0aaeb071d29c650e9d45c1
       size: 16971
     - path: models/gb_maccs_fp/model.pkl
-      md5: d550e93ad06967a2c0c932dd4c3ad700
-      size: 123438
+      md5: 6460bf2c682ab03a5efd6decfd9faba1
+      size: 364519
     - path: scripts/evaluation/eval_gb.py
       md5: f15370260290c4ae586311668b2bfbd0
       size: 1561
     outs:
     - path: results/gb_maccs_fp/val.json
-      md5: e9501ec787c254972199b54903134b2e
-      size: 95
+      md5: 7bc217261f1b7978c48525c2c2526e5f
+      size: 94
   evaluate_gb_morgan_fp@train:
     cmd: python scripts/evaluation/eval_gb.py models/gb_morgan_fp/model.pkl data/features/fingerprints/morgan/train.npz
       results/gb_morgan_fp/train.json

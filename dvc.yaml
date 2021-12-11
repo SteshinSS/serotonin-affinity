@@ -68,6 +68,9 @@ stages:
     cmd: >-
       python scripts/training/train_gb.py
       --subsample=${train_gb.subsample}
+      --n_estimators=${train_gb.n_estimators}
+      --max_depth=${train_gb.max_depth}
+      --use_weights=${train_gb.use_weights}
       data/features/fingerprints/topological/train.npz
       models/gb_topological_fp/model.pkl
     deps:
@@ -98,6 +101,9 @@ stages:
     cmd: >-
       python scripts/training/train_gb.py
       --subsample=${train_gb.subsample}
+      --n_estimators=${train_gb.n_estimators}
+      --max_depth=${train_gb.max_depth}
+      --use_weights=${train_gb.use_weights}
       data/features/fingerprints/morgan/train.npz
       models/gb_morgan_fp/model.pkl
     deps:
@@ -127,6 +133,8 @@ stages:
     cmd: >-
       python scripts/training/train_gb.py
       --subsample=${train_gb.subsample}
+      --n_estimators=${train_gb.n_estimators}
+      --max_depth=${train_gb.max_depth}
       --use_weights=${train_gb.use_weights}
       data/features/fingerprints/maccs/train.npz
       models/gb_maccs_fp/model.pkl

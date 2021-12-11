@@ -5,6 +5,7 @@ filter:
   # Keep molecules with null affinity value. Consider null molecules as not active, if true
   keep_null: true
 
+
 split:
   # Ratio of the test split (of the all filtered dataset)
   test_ratio: 0.2
@@ -17,6 +18,7 @@ split:
 
   random_seed: 228
 
+
 featurize_morgan_fp:
   # Radius of Morgan fingerprints
   radius: 2
@@ -24,10 +26,21 @@ featurize_morgan_fp:
   # Number of bit of a fingerprint
   n_bits: 1024
 
+
 train_gb:
-  subsample: 0.1
+  # Fraction of samples used for fitting a single tree
+  subsample: 0.3
+
+  # The number of boosting stages to perform
+  n_estimators: 300
+
+  # The maximum depth of the individual regression estimators
+  max_depth: 3
+
+  # Use weighted loss. Use it if you have unbalanced dataset
   use_weights: true
-  
+
+
 generate_voxels:
   box_size_x: 10
   box_size_y: 10
