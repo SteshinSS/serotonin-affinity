@@ -1,5 +1,5 @@
 data/raw
 data/preprocessed
-
+lightning*
 __pycache__/
 *.py[cod]

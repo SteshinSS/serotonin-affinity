@@ -81,19 +81,19 @@ stages:
       size: 622669
       nfiles: 3
   train_gb_topological_fp:
-    cmd: python scripts/training/train_gb.py --subsample=0.1 data/features/fingerprints/topological/train.npz
-      models/gb_topological_fp/model.pkl
+    cmd: python scripts/training/train_gb.py --subsample=0.3 --n_estimators=300 --max_depth=3
+      --use_weights=true data/features/fingerprints/topological/train.npz models/gb_topological_fp/model.pkl
     deps:
     - path: data/features/fingerprints/topological/train.npz
       md5: 9e46f4dcf0d878d26c2acc4b657fc7af
       size: 2692151
     - path: scripts/training/train_gb.py
-      md5: d70a1074158672ce68ca378c7c3d7460
-      size: 1660
+      md5: fae5c50dc1c9ba434cd0b4da51c6eb27
+      size: 2152
     outs:
     - path: models/gb_topological_fp/model.pkl
-      md5: 4942f5364f1af1e4400e18cb58346ae0
-      size: 124891
+      md5: 5bafa083c0d4f3abb431453d7bdd787f
+      size: 365933
   train_gb_maccs_fp:
     cmd: python scripts/training/train_gb.py --subsample=0.3 --n_estimators=300 --max_depth=3
       --use_weights=true data/features/fingerprints/maccs/train.npz models/gb_maccs_fp/model.pkl
@@ -109,49 +109,49 @@ stages:
       md5: 6460bf2c682ab03a5efd6decfd9faba1
       size: 364519
   train_gb_morgan_fp:
-    cmd: python scripts/training/train_gb.py --subsample=0.1 data/features/fingerprints/morgan/train.npz
-      models/gb_morgan_fp/model.pkl
+    cmd: python scripts/training/train_gb.py --subsample=0.3 --n_estimators=300 --max_depth=3
+      --use_weights=true data/features/fingerprints/morgan/train.npz models/gb_morgan_fp/model.pkl
     deps:
     - path: data/features/fingerprints/morgan/train.npz
       md5: aa4e7622ff581a55c3d51819e5feb0c8
       size: 453055
     - path: scripts/training/train_gb.py
-      md5: d70a1074158672ce68ca378c7c3d7460
-      size: 1660
+      md5: fae5c50dc1c9ba434cd0b4da51c6eb27
+      size: 2152
     outs:
     - path: models/gb_morgan_fp/model.pkl
-      md5: f10791ad1fbb9ed0cc31111b2ef2b397
-      size: 123484
+      md5: 718c232cd772fc1b3a0429e197c31aba
+      size: 360813
   generate_conformers:
-    cmd: python pipeline/generate_conformers.py data/splitted data/conformers
+    cmd: python scripts/preprocessing/generate_conformers.py data/splitted data/conformers
     deps:
     - path: data/splitted
-      md5: d70a2f15bfb6f458327e94e4deb32d7b.dir
+      md5: 6228c40c50cf71ab570195f7f8bfa595.dir
       size: 361597
       nfiles: 3
-    - path: pipeline/generate_conformers.py
-      md5: b31bcaa9465e897410f3b7bfbc521740
-      size: 2033
+    - path: scripts/preprocessing/generate_conformers.py
+      md5: a8455786cc5badc5eaea15e17f78e7fb
+      size: 2054
     outs:
     - path: data/conformers
-      md5: bcee52d74eb9d7304e7f2070d0ef3d65.dir
-      size: 8483776
+      md5: 313ab88ae7df4b5e90cdfe62cf28a0bc.dir
+      size: 8483767
       nfiles: 3
   generate_voxels:
-    cmd: python pipeline/generate_voxels.py --voxel_size=0.5 --box_size_x=10 --box_size_y=10
-      --box_size_z=10 data/conformers data/voxels
+    cmd: python scripts/preprocessing/generate_voxels.py --voxel_size=0.5 --box_size_x=15
+      --box_size_y=15 --box_size_z=15 data/conformers data/features/voxels
     deps:
     - path: data/conformers
-      md5: bcee52d74eb9d7304e7f2070d0ef3d65.dir
-      size: 8483776
+      md5: 313ab88ae7df4b5e90cdfe62cf28a0bc.dir
+      size: 8483767
       nfiles: 3
-    - path: pipeline/generate_voxels.py
-      md5: eb9c84066a90234078ac9d517ae04c16
-      size: 2394
+    - path: scripts/preprocessing/generate_voxels.py
+      md5: da1beff11c9f42eaeb242a10130a17f5
+      size: 2406
     outs:
-    - path: data/voxels
-      md5: 50a6fdd1cfaef4d8a473cc7b68629195.dir
-      size: 1022491856
+    - path: data/features/voxels
+      md5: a986c9240336e94af84fad752e6223a3.dir
+      size: 1731893074
       nfiles: 3
   evaluate_gb_topological_fp@val:
     cmd: python scripts/evaluation/eval_gb.py models/gb_topological_fp/model.pkl data/features/fingerprints/topological/val.npz
@@ -161,15 +161,15 @@ stages:
       md5: be2a4173a93d6f6f3264d5351307481f
       size: 304670
     - path: models/gb_topological_fp/model.pkl
-      md5: 4942f5364f1af1e4400e18cb58346ae0
-      size: 124891
+      md5: 5bafa083c0d4f3abb431453d7bdd787f
+      size: 365933
     - path: scripts/evaluation/eval_gb.py
       md5: f15370260290c4ae586311668b2bfbd0
       size: 1561
     outs:
     - path: results/gb_topological_fp/val.json
-      md5: f535294ea18ad4d5695d65103d1c43fc
-      size: 94
+      md5: 509acb3c4ed15699c92610549b02b98e
+      size: 95
   evaluate_gb_topological_fp@train:
     cmd: python scripts/evaluation/eval_gb.py models/gb_topological_fp/model.pkl data/features/fingerprints/topological/train.npz
       results/gb_topological_fp/train.json
@@ -178,14 +178,14 @@ stages:
       md5: 9e46f4dcf0d878d26c2acc4b657fc7af
       size: 2692151
     - path: models/gb_topological_fp/model.pkl
-      md5: 4942f5364f1af1e4400e18cb58346ae0
-      size: 124891
+      md5: 5bafa083c0d4f3abb431453d7bdd787f
+      size: 365933
     - path: scripts/evaluation/eval_gb.py
       md5: f15370260290c4ae586311668b2bfbd0
       size: 1561
     outs:
     - path: results/gb_topological_fp/train.json
-      md5: f32da3164360514e0747f97ce71e8aab
+      md5: 05518c38b2446533e2153145b51d70e1
       size: 94
   evaluate_gb_maccs_fp@val:
     cmd: python scripts/evaluation/eval_gb.py models/gb_maccs_fp/model.pkl data/features/fingerprints/maccs/val.npz
@@ -212,14 +212,14 @@ stages:
       md5: aa4e7622ff581a55c3d51819e5feb0c8
       size: 453055
     - path: models/gb_morgan_fp/model.pkl
-      md5: f10791ad1fbb9ed0cc31111b2ef2b397
-      size: 123484
+      md5: 718c232cd772fc1b3a0429e197c31aba
+      size: 360813
     - path: scripts/evaluation/eval_gb.py
       md5: f15370260290c4ae586311668b2bfbd0
       size: 1561
     outs:
     - path: results/gb_morgan_fp/train.json
-      md5: c1457a23c5bfd8ce9c9ecad795eb3867
+      md5: 7bf66ea18b1fe38fef7d1a8873416afe
       size: 95
   evaluate_gb_morgan_fp@val:
     cmd: python scripts/evaluation/eval_gb.py models/gb_morgan_fp/model.pkl data/features/fingerprints/morgan/val.npz
@@ -229,15 +229,15 @@ stages:
       md5: 6c0ccacf46cafbf658ef1bd0d3119e40
       size: 51901
     - path: models/gb_morgan_fp/model.pkl
-      md5: f10791ad1fbb9ed0cc31111b2ef2b397
-      size: 123484
+      md5: 718c232cd772fc1b3a0429e197c31aba
+      size: 360813
     - path: scripts/evaluation/eval_gb.py
       md5: f15370260290c4ae586311668b2bfbd0
       size: 1561
     outs:
     - path: results/gb_morgan_fp/val.json
-      md5: 28523bedcc160c97a6b61882fefe921a
-      size: 94
+      md5: 5ab1445570d7ffbfce7dcdc778b2cad1
+      size: 95
   evaluate_gb_maccs_fp@train:
     cmd: python scripts/evaluation/eval_gb.py models/gb_maccs_fp/model.pkl data/features/fingerprints/maccs/train.npz
       results/gb_maccs_fp/train.json
@@ -246,12 +246,55 @@ stages:
       md5: bae528ac6add579d9c0ec51c6f2ae8cc
       size: 148309
     - path: models/gb_maccs_fp/model.pkl
-      md5: d550e93ad06967a2c0c932dd4c3ad700
-      size: 123438
+      md5: 6460bf2c682ab03a5efd6decfd9faba1
+      size: 364519
     - path: scripts/evaluation/eval_gb.py
       md5: f15370260290c4ae586311668b2bfbd0
       size: 1561
     outs:
     - path: results/gb_maccs_fp/train.json
-      md5: 3be25b4351a85c3d6b8241893c48bd7f
-      size: 93
+      md5: fab424dca9019292e426ccd20031fc53
+      size: 95
+  train_cnn:
+    cmd: python scripts/training/train_cnn.py --batch_size=32 --learning_rate=0.001
+      --l2_lambda=0.04 --dropout=0.4 --seed=228 data/features/voxels models/cnn/model.ckpt
+    deps:
+    - path: data/features/voxels
+      md5: a986c9240336e94af84fad752e6223a3.dir
+      size: 1731893074
+      nfiles: 3
+    - path: scripts/training/train_cnn.py
+      md5: 31de2ee0c81556d30c1f389f0e73ed04
+      size: 2084
+    outs:
+    - path: models/cnn/model.ckpt
+      md5: d56eb4ce501d7dc2283e08a427509a2e
+      size: 120096587
+  evaluate_cnn@val:
+    cmd: python scripts/evaluation/eval_cnn.py models/cnn/model.ckpt data/features/voxels/val.npz
+      results/cnn/val.json
+    deps:
+    - path: data/features/voxels/val.npz
+      md5: ec16bb1c9b0ce13404dccaa76ef5220b
+      size: 143055929
+    - path: models/cnn/model.ckpt
+      md5: d56eb4ce501d7dc2283e08a427509a2e
+      size: 120096587
+    outs:
+    - path: results/cnn/val.json
+      md5: 0572836f9b83ffe7c0c39971ea7e14f6
+      size: 95
+  evaluate_cnn@train:
+    cmd: python scripts/evaluation/eval_cnn.py models/cnn/model.ckpt data/features/voxels/train.npz
+      results/cnn/train.json
+    deps:
+    - path: data/features/voxels/train.npz
+      md5: dace16c498131d4ad350058b387be4dc
+      size: 1262188724
+    - path: models/cnn/model.ckpt
+      md5: d56eb4ce501d7dc2283e08a427509a2e
+      size: 120096587
+    outs:
+    - path: results/cnn/train.json
+      md5: 3871b4ed8658900986be27ec8d431097
+      size: 95

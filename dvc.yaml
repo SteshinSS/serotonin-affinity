@@ -180,21 +180,41 @@ stages:
       --box_size_y=${generate_voxels.box_size_y}
       --box_size_z=${generate_voxels.box_size_z}
       data/conformers
-      data/voxels
+      data/features/voxels
     deps:
       - data/conformers
       - scripts/preprocessing/generate_voxels.py
     outs:
-      - data/voxels
+      - data/features/voxels
   
   train_cnn:
     cmd: >-
       python scripts/training/train_cnn.py
-      data/voxels
+      --batch_size=${train_cnn.batch_size}
+      --learning_rate=${train_cnn.learning_rate}
+      --l2_lambda=${train_cnn.l2_lambda}
+      --dropout=${train_cnn.dropout}
+      --seed=${train_cnn.seed}
+      data/features/voxels
+      models/cnn/model.ckpt
     deps:
-      - data/voxels
+      - data/features/voxels
       - scripts/training/train_cnn.py
     outs:
       - models/cnn/model.ckpt
     
-    
+  evaluate_cnn:
+    foreach:
+      - train
+      - val
+    do:
+      cmd: >-
+        python scripts/evaluation/eval_cnn.py
+        models/cnn/model.ckpt
+        data/features/voxels/${item}.npz
+        results/cnn/${item}.json
+      deps:
+        - models/cnn/model.ckpt
+        - data/features/voxels/${item}.npz
+      metrics:
+        - results/cnn/${item}.json

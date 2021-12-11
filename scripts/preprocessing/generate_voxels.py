@@ -30,7 +30,7 @@ def generate_voxels(conformers: list, voxel_size: float, box_size: list):
             log.info(f"Generated {i} voxels out of {len(conformers)}...")
         molecule = SmallMol(conformer)
         voxel, _, _ = getVoxelDescriptors(molecule, boxsize=box_size, voxelsize=voxel_size, center=[0.0, 0.0, 0.0])
-        voxel = voxel.reshape((box_size[0], box_size[1], box_size[2], -1))
+        voxel = voxel.reshape((box_size[0] * 2, box_size[1] * 2, box_size[2] * 2, -1))
         voxels.append(voxel)
         is_active.append(is_active_current)
     return np.stack(voxels), np.stack(is_active)

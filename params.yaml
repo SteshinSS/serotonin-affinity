@@ -42,7 +42,14 @@ train_gb:
 
 
 generate_voxels:
-  box_size_x: 10
-  box_size_y: 10
-  box_size_z: 10
+  box_size_x: 15
+  box_size_y: 15
+  box_size_z: 15
   voxel_size: 0.5
+
+train_cnn:
+  batch_size: 32
+  learning_rate: 1e-3
+  l2_lambda: 0.04
+  dropout: 0.4
+  seed: 228
