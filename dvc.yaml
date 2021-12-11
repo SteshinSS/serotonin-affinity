@@ -1,7 +1,7 @@
 stages:
   filter:
     cmd: >-
-      python pipeline/filter.py
+      python scripts/preprocessing/filter.py
       --threshold=${filter.threshold}
       --keep_null=${filter.keep_null}
       data/raw/smiles.tsv.gz
@@ -10,13 +10,13 @@ stages:
     deps:
       - data/raw/activities.tsv.gz
       - data/raw/smiles.tsv.gz
-      - pipeline/filter.py
+      - scripts/preprocessing/filter.py
     outs:
       - data/filtered
   
   split:
     cmd: >-
-      python pipeline/split.py
+      python scripts/preprocessing/split.py
       --test_ratio=${split.test_ratio}
       --val_ratio=${split.val_ratio}
       --homology_based ${split.homology_based}
@@ -25,96 +25,147 @@ stages:
       data/splitted
     deps:
       - data/filtered
-      - pipeline/split.py
+      - scripts/preprocessing/split.py
     outs:
       - data/splitted
   
   featurize_topological_fp:
     cmd: >-
-      python pipeline/featurize_topological_fp.py
+      python scripts/preprocessing/featurize_topological_fp.py
       data/splitted
       data/features/fingerprints/topological
     deps:
       - data/splitted
-      - pipeline/featurize_topological_fp.py
+      - scripts/preprocessing/featurize_topological_fp.py
     outs:
       - data/features/fingerprints/topological
 
   featurize_morgan_fp:
     cmd: >-
-      python pipeline/featurize_morgan_fp.py
+      python scripts/preprocessing/featurize_morgan_fp.py
       --radius=${featurize_morgan_fp.radius}
       --n_bits=${featurize_morgan_fp.n_bits}
       data/splitted
       data/features/fingerprints/morgan
     deps:
       - data/splitted
-      - pipeline/featurize_morgan_fp.py
+      - scripts/preprocessing/featurize_morgan_fp.py
     outs:
       - data/features/fingerprints/morgan
   
   featurize_maccs_fp:
     cmd: >-
-      python pipeline/featurize_maccs_fp.py
+      python scripts/preprocessing/featurize_maccs_fp.py
       data/splitted
       data/features/fingerprints/maccs
     deps:
       - data/splitted
-      - pipeline/featurize_maccs_fp.py
+      - scripts/preprocessing/featurize_maccs_fp.py
     outs:
       - data/features/fingerprints/maccs
   
   train_gb_topological_fp:
     cmd: >-
-      python pipeline/train_gb.py
+      python scripts/training/train_gb.py
       --subsample=${train_gb.subsample}
       data/features/fingerprints/topological/train.npz
       models/gb_topological_fp/model.pkl
     deps:
       - data/features/fingerprints/topological/train.npz
-      - pipeline/train_gb.py
+      - scripts/training/train_gb.py
     outs:
       - models/gb_topological_fp/model.pkl
+  
+  evaluate_gb_topological_fp:
+    foreach:
+      - train
+      - val
+    do:
+      cmd: >-
+        python scripts/evaluation/eval_gb.py
+        models/gb_topological_fp/model.pkl
+        data/features/fingerprints/topological/${item}.npz
+        results/gb_topological_fp/${item}.json
+      deps:
+        - scripts/evaluation/eval_gb.py
+        - models/gb_topological_fp/model.pkl
+        - data/features/fingerprints/topological/${item}.npz
+      outs:
+        - results/gb_topological_fp/${item}.json
 
   train_gb_morgan_fp:
     cmd: >-
-      python pipeline/train_gb.py
+      python scripts/training/train_gb.py
       --subsample=${train_gb.subsample}
       data/features/fingerprints/morgan/train.npz
       models/gb_morgan_fp/model.pkl
     deps:
       - data/features/fingerprints/morgan/train.npz
-      - pipeline/train_gb.py
+      - scripts/training/train_gb.py
     outs:
       - models/gb_morgan_fp/model.pkl
 
+  evaluate_gb_morgan_fp:
+    foreach:
+      - train
+      - val
+    do:
+      cmd: >-
+        python scripts/evaluation/eval_gb.py
+        models/gb_morgan_fp/model.pkl
+        data/features/fingerprints/morgan/${item}.npz
+        results/gb_morgan_fp/${item}.json
+      deps:
+        - scripts/evaluation/eval_gb.py
+        - models/gb_morgan_fp/model.pkl
+        - data/features/fingerprints/morgan/${item}.npz
+      outs:
+        - results/gb_morgan_fp/${item}.json
+
   train_gb_maccs_fp:
     cmd: >-
-      python pipeline/train_gb.py
+      python scripts/training/train_gb.py
       --subsample=${train_gb.subsample}
       --use_weights=${train_gb.use_weights}
       data/features/fingerprints/maccs/train.npz
       models/gb_maccs_fp/model.pkl
     deps:
       - data/features/fingerprints/maccs/train.npz
-      - pipeline/train_gb.py
+      - scripts/training/train_gb.py
     outs:
       - models/gb_maccs_fp/model.pkl
+
+  evaluate_gb_maccs_fp:
+    foreach:
+      - train
+      - val
+    do:
+      cmd: >-
+        python scripts/evaluation/eval_gb.py
+        models/gb_maccs_fp/model.pkl
+        data/features/fingerprints/maccs/${item}.npz
+        results/gb_maccs_fp/${item}.json
+      deps:
+        - scripts/evaluation/eval_gb.py
+        - models/gb_maccs_fp/model.pkl
+        - data/features/fingerprints/maccs/${item}.npz
+      outs:
+        - results/gb_maccs_fp/${item}.json
   
   generate_conformers:
     cmd: >-
-      python pipeline/generate_conformers.py
+      python scripts/preprocessing/generate_conformers.py
       data/splitted
       data/conformers
     deps:
       - data/splitted
-      - pipeline/generate_conformers.py
+      - scripts/preprocessing/generate_conformers.py
     outs:
       - data/conformers
   
   generate_voxels:
     cmd: >-
-      python pipeline/generate_voxels.py
+      python scripts/preprocessing/generate_voxels.py
       --voxel_size=${generate_voxels.voxel_size}
       --box_size_x=${generate_voxels.box_size_x}
       --box_size_y=${generate_voxels.box_size_y}
@@ -123,8 +174,18 @@ stages:
       data/voxels
     deps:
       - data/conformers
-      - pipeline/generate_voxels.py
+      - scripts/preprocessing/generate_voxels.py
     outs:
       - data/voxels
+  
+  train_cnn:
+    cmd: >-
+      python scripts/training/train_cnn.py
+      data/voxels
+    deps:
+      - data/voxels
+      - scripts/training/train_cnn.py
+    outs:
+      - models/cnn/model.ckpt
     
     

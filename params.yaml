@@ -12,7 +12,6 @@ featurize_morgan_fp:
   radius: 2
   n_bits: 1024
 
-
 train_gb:
   subsample: 0.1
   use_weights: true
