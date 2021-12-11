@@ -94,7 +94,8 @@ stages:
         - models/gb_topological_fp/model.pkl
         - data/features/fingerprints/topological/${item}.npz
       metrics:
-        - results/gb_topological_fp/${item}.json
+        - results/gb_topological_fp/${item}.json:
+            cache: false
 
 
   train_gb_morgan_fp:
@@ -127,7 +128,8 @@ stages:
         - models/gb_morgan_fp/model.pkl
         - data/features/fingerprints/morgan/${item}.npz
       metrics:
-        - results/gb_morgan_fp/${item}.json
+        - results/gb_morgan_fp/${item}.json:
+            cache: false
 
   train_gb_maccs_fp:
     cmd: >-
@@ -159,7 +161,8 @@ stages:
         - models/gb_maccs_fp/model.pkl
         - data/features/fingerprints/maccs/${item}.npz
       metrics:
-        - results/gb_maccs_fp/${item}.json
+        - results/gb_maccs_fp/${item}.json:
+            cache: false
   
   generate_conformers:
     cmd: >-
@@ -217,4 +220,5 @@ stages:
         - models/cnn/model.ckpt
         - data/features/voxels/${item}.npz
       metrics:
-        - results/cnn/${item}.json
+        - results/cnn/${item}.json:
+            cache: false
