@@ -5,7 +5,7 @@ filter:
 split:
   test_ratio: 0.2  # test subset ratio of the all data
   val_ratio: 0.1  # validation subset ratio of the all dataset without the test data
-  homology_based: false
+  homology_based: true
   random_seed: 228
 
 featurize_morgan_fp:
