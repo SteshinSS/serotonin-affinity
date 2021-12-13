@@ -1,4 +1,7 @@
 [core]
-    remote = storage
+    remote = public_s3
 ['remote "storage"']
     url = s3://serotonin-affinity/data
+['remote "public_s3"']
+    url = https://serotonin-affinity.s3.eu-west-3.amazonaws.com/data/
+    verify = False
