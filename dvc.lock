@@ -280,6 +280,9 @@ stages:
     - path: models/cnn/model.ckpt
       md5: d56eb4ce501d7dc2283e08a427509a2e
       size: 120096587
+    - path: scripts/evaluation/eval_cnn.py
+      md5: f131f97892ecbf74af4358c9488d8469
+      size: 2296
     outs:
     - path: results/cnn/val.json
       md5: 0572836f9b83ffe7c0c39971ea7e14f6
@@ -294,7 +297,38 @@ stages:
     - path: models/cnn/model.ckpt
       md5: d56eb4ce501d7dc2283e08a427509a2e
       size: 120096587
+    - path: scripts/evaluation/eval_cnn.py
+      md5: f131f97892ecbf74af4358c9488d8469
+      size: 2296
     outs:
     - path: results/cnn/train.json
       md5: 3871b4ed8658900986be27ec8d431097
       size: 95
+  evaluate_dummy@train:
+    cmd: python scripts/evaluation/eval_dummy.py data/features/fingerprints/maccs/train.npz
+      results/dummy/train.json
+    deps:
+    - path: data/features/fingerprints/maccs/train.npz
+      md5: bae528ac6add579d9c0ec51c6f2ae8cc
+      size: 148309
+    - path: scripts/evaluation/eval_dummy.py
+      md5: 640f4a35ee39a15a7533903a0c2ea2c9
+      size: 1443
+    outs:
+    - path: results/dummy/train.json
+      md5: bdc9f10b05bf48e5e1760250caf26d28
+      size: 65
+  evaluate_dummy@val:
+    cmd: python scripts/evaluation/eval_dummy.py data/features/fingerprints/maccs/val.npz
+      results/dummy/val.json
+    deps:
+    - path: data/features/fingerprints/maccs/val.npz
+      md5: c8bdaac1ec0aaeb071d29c650e9d45c1
+      size: 16971
+    - path: scripts/evaluation/eval_dummy.py
+      md5: 640f4a35ee39a15a7533903a0c2ea2c9
+      size: 1443
+    outs:
+    - path: results/dummy/val.json
+      md5: c6565e30b2672da470df7b894f54dbc0
+      size: 65

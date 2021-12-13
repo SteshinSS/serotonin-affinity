@@ -219,6 +219,24 @@ stages:
       deps:
         - models/cnn/model.ckpt
         - data/features/voxels/${item}.npz
+        - scripts/evaluation/eval_cnn.py
       metrics:
         - results/cnn/${item}.json:
             cache: false
+  
+  evaluate_dummy:
+    foreach:
+      - train
+      - val
+    do:
+      cmd: >-
+        python scripts/evaluation/eval_dummy.py
+        data/features/fingerprints/maccs/${item}.npz
+        results/dummy/${item}.json
+      deps:
+        - scripts/evaluation/eval_dummy.py
+        - data/features/fingerprints/maccs/${item}.npz
+      metrics:
+        - results/dummy/${item}.json:
+            cache: false
+
